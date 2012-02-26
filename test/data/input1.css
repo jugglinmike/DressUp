@@ -1,0 +1,8 @@
+div.mark {
+  font-family: 'Century Gothic', sans-serif;
+  height: 120%;
+}
+div.matt {
+  background: url("bg.png");
+  z-index: 2;
+}
