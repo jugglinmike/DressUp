@@ -2,7 +2,7 @@
 # newlines
 def prep_css( css, quote_str )
   css = css.gsub(/#{quote_str}/, "\\\\" + quote_str)
-  quote_str + css.gsub(/\r\n?/, " ") + quote_str
+  quote_str + css.gsub(/\r|\n/, " ") + quote_str
 end
 
 def parse_rules( contents, all_rules )
