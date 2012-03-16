@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # Prepare CSS for inclusion in a JavaScript string: escape quotes and remove
 # newlines
 def prep_css( css, quote_str )
