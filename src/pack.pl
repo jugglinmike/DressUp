@@ -58,11 +58,12 @@ sub lookup_css_rule {
 	my $selectors = shift;
 	my $all_rules = shift;
 
-	if ( $all_rules->{$selectors} ) {
-		return prep_css($all_rules->{$selectors}, $quote_str);
+	# Exit with error status 1 if an unrecognized rule is encountered
+	if ( !$all_rules->{$selectors} ) {
+		exit 1;
 	}
 
-	return $directive;
+	return prep_css($all_rules->{$selectors}, $quote_str);
 }
 
 # Given an "import file" directive (and its component parts), either return a
@@ -77,7 +78,7 @@ sub lookup_css_file {
 
 	my $full_name = File::Spec->catpath( $rel_volume, $rel_directory, $file_name );
 	
-	# Exit with an error if an unreadable file was specified
+	# Exit with error status 1 if an unreadable file was specified
 	if( !-r $full_name ) {
 		exit 1;
 	}
@@ -86,31 +87,11 @@ sub lookup_css_file {
 	return prep_css(join('', <$handle>), $quote_str);
 }
 
-#%thing = ('matt', 30);
-#$tmp = "div.csc { z-index: 3; } div.bbd { z-index: 5; }";
-#parse_rules($tmp, \%thing);
-#for (keys %thing)
-#{
-#	print $_, ": ", $thing{$_}, "\n";
-#}
-
-#{
-#	local $/ = undef;
-#	open(INFILE, $ARGV[0]) or die "Couldn't open file: '$ARGV[1]'";
-#	$contents = <INFILE>;
-#	close INFILE;
-#}
-
 %file_names = ( css, [], js, []);
 %all_rules = ();
 
 foreach $filename ( @ARGV ) {
 	local $/ = undef;
-
-#	open(INFILE, $filename) or die "Couldn't open file: '$filename'";
-#	print $filename, "\n";
-#	$contents = <INFILE>;
-#	close INFILE;
 
 	if (! -r $filename) {
 		next;
@@ -118,15 +99,7 @@ foreach $filename ( @ARGV ) {
 
 	if ($filename =~ /\.(css|js)$/) {
 		push($file_names{$1}, $filename);
-#		$contents = input => $contents;
-#		while ($contents =~ /([^{]+)\s*{([^}]+)}/g) {
-#			$selectors = $1;
-#			$declarations = $2;
-#			$declarations =~ s/\n//g;
-#			print "- ", $selectors, ": ", $declarations, "\n";
-#		}
 	}
-	#print <INFILE>;
 }
 
 foreach $filename (@{$file_names{css}}) {
@@ -136,10 +109,6 @@ foreach $filename (@{$file_names{css}}) {
 
 	parse_rules( $str, \%all_rules);
 }
-
-#foreach $selectors (keys %all_rules) {
-#	print "$selectors: '", prep_css($all_rules{$selectors}, "'"), "'\n";
-#}
 
 foreach $filename (@{$file_names{js}}) {
 

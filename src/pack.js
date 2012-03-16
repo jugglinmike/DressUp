@@ -25,14 +25,17 @@ var processJs = function( contents, directory, allRules ) {
 	contents = contents.replace(/(["'])\s*!import_rule\s+(.+)\1/g,
 		function( matched, quoteStr, selectors ) {
 
-	if ( allRules[ selectors.trim() ] ) {
-	return prepCss(allRules[ selectors.trim() ], quoteStr);
-	}
-	  return matched;
+			// Exit with error status 1 if an unrecognized rule is encountered
+			if ( !allRules[ selectors.trim() ] ) {
+				process.exit(1);
+			}
+
+			return prepCss(allRules[ selectors.trim() ], quoteStr);
 		}
 	);
 
 	// Import files
+
 	contents = contents.replace(/(["'])\s*!import_file\s+(.+)\1/g,
 		function( matched, quoteStr, fileName ) {
 			var css;
@@ -40,7 +43,7 @@ var processJs = function( contents, directory, allRules ) {
 				css = fs.readFileSync( path.join( directory, fileName ), "ascii" );
 				return prepCss( css, quoteStr );
 			} catch( err ) {
-				// Exit with an error if an unreadable file was specified
+				// Exit with error status 1 if an unreadable file was specified
 				process.exit(1);
 			}
 		}

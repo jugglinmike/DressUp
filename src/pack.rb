@@ -21,8 +21,9 @@ def process_js( contents, directory, all_rules )
     selectors = $2
     rule = all_rules[selectors]
 
-    # Ignore unrecognized rules
+    # Exit with error status 1 if an unrecognized rule is encountered
     if( !rule )
+      exit 1;
       next matched
     end
     
@@ -35,7 +36,7 @@ def process_js( contents, directory, all_rules )
     quote_str = $1
     file_name = directory + File::SEPARATOR + $2
 
-    # Exit with an error if an unreadable file was specified
+    # Exit with error status 1 if an unreadable file was specified
     if !File.file?(file_name) || !File.readable?(file_name)
       exit 1;
     end

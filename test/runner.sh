@@ -12,25 +12,31 @@ function runTests()
 
   if ! $executable $scriptFile data/import_rule_in.css data/import_rule_in.js | diff - data/import_rule_out.js > /dev/null;
   then
-    echo 'Error!'
+  echo 'Failed test: import rule (CSS first)'
     hasErrors=true
   fi
 
   if ! $executable $scriptFile data/import_rule_in.js data/import_rule_in.css | diff - data/import_rule_out.js > /dev/null;
   then
-    echo 'Error!'
+  echo 'Failed test: import rule (JavaScript first)'
     hasErrors=true
   fi
 
   if ! $executable $scriptFile data/arbitrary_directory/import_file_in.js | diff - data/arbitrary_directory/import_file_out.js > /dev/null;
   then
-    echo 'Error!'
+    echo 'Failed test: import file'
     hasErrors=true
+  fi
+
+  $executable $scriptFile data/nonexistent_rule.js data/nonexistent_rule.css > /dev/null;
+  if [[ $? != 1 ]] ; then
+	  echo 'Failed test: import nonexistent rule';
+	  hasErrors=true
   fi
 
   $executable $scriptFile data/nonexistent_file.js > /dev/null;
   if [[ $? != 1 ]] ; then
-	  echo 'Error!';
+	  echo 'Failed test: import unreadable file';
 	  hasErrors=true
   fi
 }
@@ -50,7 +56,6 @@ then
 else
 	echo "Nada";
 fi
-
 
 if $hasErrors
 then
