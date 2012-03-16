@@ -10,16 +10,28 @@ function runTests()
 
   echo "Running tests for $executable implementation...";
 
-  if ! $executable $scriptFile data/input1.css data/input1.js | diff - data/output1.js > /dev/null;
+  if ! $executable $scriptFile data/import_rule_in.css data/import_rule_in.js | diff - data/import_rule_out.js > /dev/null;
   then
     echo 'Error!'
     hasErrors=true
   fi
 
-  if ! $executable $scriptFile data/input1.js data/input1.css | diff - data/output1.js > /dev/null
+  if ! $executable $scriptFile data/import_rule_in.js data/import_rule_in.css | diff - data/import_rule_out.js > /dev/null;
   then
     echo 'Error!'
     hasErrors=true
+  fi
+
+  if ! $executable $scriptFile data/arbitrary_directory/import_file_in.js | diff - data/arbitrary_directory/import_file_out.js > /dev/null;
+  then
+    echo 'Error!'
+    hasErrors=true
+  fi
+
+  $executable $scriptFile data/nonexistent_file.js > /dev/null;
+  if [[ $? != 1 ]] ; then
+	  echo 'Error!';
+	  hasErrors=true
   fi
 }
 

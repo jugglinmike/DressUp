@@ -77,8 +77,9 @@ sub lookup_css_file {
 
 	my $full_name = File::Spec->catpath( $rel_volume, $rel_directory, $file_name );
 	
+	# Exit with an error if an unreadable file was specified
 	if( !-r $full_name ) {
-		return $directive;
+		exit 1;
 	}
 
 	open( $handle, "<", $full_name ) || die "Can't open file '$full_name'";

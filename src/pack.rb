@@ -34,8 +34,9 @@ def process_js( contents, directory, all_rules )
     quote_str = $1
     file_name = directory + File::SEPARATOR + $2
 
+    # Exit with an error if an unreadable file was specified
     if !File.file?(file_name) || !File.readable?(file_name)
-      next matched
+      exit 1;
     end
 
     css = File.open(file_name, "rb") { |f| f.read }
