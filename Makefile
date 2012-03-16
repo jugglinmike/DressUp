@@ -3,7 +3,6 @@
 # Right now just used to test
 
 test: testruby testperl testjs
-	echo ""
 
 testruby:
 	cd test; ./runner.sh ruby
