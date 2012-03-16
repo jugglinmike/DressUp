@@ -6,12 +6,12 @@ test: testruby testperl testjs
 	echo ""
 
 testruby:
-	cd test; ./ruby.sh ruby
+	cd test; ./runner.sh ruby
 
 testperl:
-	cd test; ./ruby.sh perl
+	cd test; ./runner.sh perl
 
 testjs:
-	cd test; ./ruby.sh js
+	cd test; ./runner.sh js
 
 .PHONY: test
