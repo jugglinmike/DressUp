@@ -10,9 +10,14 @@ use File::Spec;
 sub prep_css {
 	my $css = shift;
 	my $quoteStr = shift;
+	my $force_important = shift;
 
 	$css =~ s/\n/ /g;
 	$css =~ s/$quoteStr/\\$quoteStr/g;
+
+	if ($force_important) {
+		$css =~ s/;/ !important;/g;
+	}
 
 	return $quoteStr . $css . $quoteStr;
 }
@@ -40,11 +45,11 @@ sub process_js {
 	my $directory = shift;
 	my $all_rules = shift;
 
-	$contents =~ s/((["'])\s*!import_rule\s+(.+)\2)/
-		lookup_css_rule($1, $2, $3, \%all_rules)/ge;
+	$contents =~ s/((["'])\s*!import_rule\s+(.+?)(!important)?\2)/
+		lookup_css_rule($1, $2, $3, $4, \%all_rules)/ge;
 
-	$contents =~ s/((["'])\s*!import_file\s+(.+)\2)/
-		lookup_css_file($1, $2, $3, $volume, $directory)/ge;
+	$contents =~ s/((["'])\s*!import_file\s+(.+?)(!important)?\2)/
+		lookup_css_file($1, $2, $3, $4, $volume, $directory)/ge;
 
 	return $contents;
 }
@@ -56,14 +61,19 @@ sub lookup_css_rule {
 	my $directive = shift;
 	my $quote_str = shift;
 	my $selectors = shift;
+	my $force_important = shift;
 	my $all_rules = shift;
+
+	# Trim leading and trailing whitespace from the selectors
+	$selectors =~ s/^\s+//;
+	$selectors =~ s/\s+$//;
 
 	# Exit with error status 1 if an unrecognized rule is encountered
 	if ( !$all_rules->{$selectors} ) {
 		exit 1;
 	}
 
-	return prep_css($all_rules->{$selectors}, $quote_str);
+	return prep_css($all_rules->{$selectors}, $quote_str, $force_important);
 }
 
 # Given an "import file" directive (and its component parts), either return a
@@ -73,8 +83,13 @@ sub lookup_css_file {
 	my $directive = shift;
 	my $quote_str = shift;
 	my $file_name = shift;
+	my $force_important = shift;
 	my $rel_volume = shift;
 	my $rel_directory = shift;
+
+	# Trim leading and trailing whitespace from the filename
+	$file_name =~ s/^\s+//;
+	$file_name =~ s/\s+$//;
 
 	my $full_name = File::Spec->catpath( $rel_volume, $rel_directory, $file_name );
 	
@@ -84,7 +99,7 @@ sub lookup_css_file {
 	}
 
 	open( $handle, "<", $full_name ) || die "Can't open file '$full_name'";
-	return prep_css(join('', <$handle>), $quote_str);
+	return prep_css(join('', <$handle>), $quote_str, $force_important);
 }
 
 %file_names = ( css, [], js, []);

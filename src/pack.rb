@@ -1,8 +1,11 @@
 #!/usr/bin/env ruby
 # Prepare CSS for inclusion in a JavaScript string: escape quotes and remove
 # newlines
-def prep_css( css, quote_str )
+def prep_css( css, quote_str, force_important )
   css = css.gsub(/#{quote_str}/, "\\\\" + quote_str)
+  if (force_important)
+    css = css.gsub(/;/, " !important;")
+  end
   quote_str + css.gsub(/\r|\n/, " ") + quote_str
 end
 
@@ -15,11 +18,11 @@ end
 def process_js( contents, directory, all_rules )
 
   # Import rules
-  contents.gsub!(/(["'])\s*!import_rule\s+(.+)\1/) { |matched|
-
+  contents.gsub!(/(["'])\s*!import_rule\s+(.+?)(!important)?\1/) { |matched|
     quote_str = $1
-    selectors = $2
+    selectors = $2.strip
     rule = all_rules[selectors]
+	is_important = $3 != nil
 
     # Exit with error status 1 if an unrecognized rule is encountered
     if( !rule )
@@ -27,14 +30,15 @@ def process_js( contents, directory, all_rules )
       next matched
     end
     
-    prep_css(rule, quote_str)
+    prep_css(rule, quote_str, is_important)
   }
 
   # Import files
-  contents.gsub(/(["'])\s*!import_file\s+(.+)\s*\1/) { |matched|
+  contents.gsub(/(["'])\s*!import_file\s+(.+?)(!important)?\s*\1/) { |matched|
 
     quote_str = $1
-    file_name = directory + File::SEPARATOR + $2
+    file_name = directory + File::SEPARATOR + $2.strip
+	is_important = $3 != nil
 
     # Exit with error status 1 if an unreadable file was specified
     if !File.file?(file_name) || !File.readable?(file_name)
@@ -43,7 +47,7 @@ def process_js( contents, directory, all_rules )
 
     css = File.open(file_name, "rb") { |f| f.read }
 
-    prep_css(css, quote_str)
+    prep_css(css, quote_str, is_important)
   }
 end
 

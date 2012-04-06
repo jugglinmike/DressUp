@@ -3,10 +3,10 @@ var path = require("path");
 
 /* Prepare CSS for inclusion in a JavaScript string: escape quotes and remove
  newlines */
-var prepCss = function( css, quoteStr, important ) {
+var prepCss = function( css, quoteStr, forceImportant ) {
 	css = css.replace(new RegExp(quoteStr, "g"), "\\" + quoteStr );
 	css = quoteStr + css.replace(/\r|\n/g, " ") + quoteStr;
-	if ( important ) {
+	if ( forceImportant ) {
 		css = css.replace(/;/g, " !important;");
 	}
 	return css;
@@ -22,26 +22,31 @@ var processJs = function( contents, directory, allRules ) {
 
 	// Import rules
 
-	contents = contents.replace(/(["'])\s*!import_rule\s+(.+)\1/g,
-		function( matched, quoteStr, selectors ) {
+	contents = contents.replace(/(["'])\s*!import_rule\s+(.+?)(!important)?\1/g,
+		function( matched, quoteStr, selectors, isImportant ) {
+
+			selectors = selectors.trim();
 
 			// Exit with error status 1 if an unrecognized rule is encountered
-			if ( !allRules[ selectors.trim() ] ) {
+			if ( !allRules[ selectors ] ) {
 				process.exit(1);
 			}
 
-			return prepCss(allRules[ selectors.trim() ], quoteStr);
+			return prepCss(allRules[ selectors ], quoteStr, !!isImportant);
 		}
 	);
 
 	// Import files
 
-	contents = contents.replace(/(["'])\s*!import_file\s+(.+)\1/g,
-		function( matched, quoteStr, fileName ) {
+	contents = contents.replace(/(["'])\s*!import_file\s+(.+?)(!important)?\1/g,
+		function( matched, quoteStr, fileName, isImportant ) {
 			var css;
+
+			fileName = fileName.trim();
+
 			try {
 				css = fs.readFileSync( path.join( directory, fileName ), "ascii" );
-				return prepCss( css, quoteStr );
+				return prepCss( css, quoteStr, isImportant );
 			} catch( err ) {
 				// Exit with error status 1 if an unreadable file was specified
 				process.exit(1);
