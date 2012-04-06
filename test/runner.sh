@@ -10,49 +10,49 @@ function runTests()
 
   echo "Running tests for $executable implementation...";
 
-  if ! $executable $scriptFile data/import_rule_in.css data/import_rule_in.js | diff - data/import_rule_out.js > /dev/null;
+  if ! $executable $scriptFile data/input/import_rule.css data/input/import_rule.js | diff - data/expected/import_rule.js > /dev/null;
   then
   echo 'Failed test: import rule (CSS first)'
     hasErrors=true
   fi
 
-  if ! $executable $scriptFile data/import_rule_in.js data/import_rule_in.css | diff - data/import_rule_out.js > /dev/null;
+  if ! $executable $scriptFile data/input/import_rule.js data/input/import_rule.css | diff - data/expected/import_rule.js > /dev/null;
   then
   echo 'Failed test: import rule (JavaScript first)'
     hasErrors=true
   fi
 
-  if ! $executable $scriptFile data/import_rule_in.css data/import_important_rule_in.js | diff - data/import_important_rule_out.js > /dev/null;
+  if ! $executable $scriptFile data/input/import_rule.css data/input/import_important_rule.js | diff - data/expected/import_important_rule.js > /dev/null;
   then
   echo 'Failed test: import !important rule (CSS first)'
     hasErrors=true
   fi
 
-  if ! $executable $scriptFile data/import_important_rule_in.js data/import_rule_in.css | diff - data/import_important_rule_out.js > /dev/null;
+  if ! $executable $scriptFile data/input/import_important_rule.js data/input/import_rule.css | diff - data/expected/import_important_rule.js > /dev/null;
   then
   echo 'Failed test: import !important rule (JavaScript first)'
     hasErrors=true
   fi
 
-  if ! $executable $scriptFile data/arbitrary_directory/import_file_in.js | diff - data/arbitrary_directory/import_file_out.js > /dev/null;
+  if ! $executable $scriptFile data/input/arbitrary_directory/import_file.js | diff - data/expected/import_file.js > /dev/null;
   then
     echo 'Failed test: import file'
     hasErrors=true
   fi
 
-  if ! $executable $scriptFile data/arbitrary_directory/import_important_file_in.js | diff - data/arbitrary_directory/import_important_file_out.js > /dev/null;
+  if ! $executable $scriptFile data/input/arbitrary_directory/import_important_file.js | diff - data/expected/import_important_file.js > /dev/null;
   then
     echo 'Failed test: import !important file'
     hasErrors=true
   fi
 
-  $executable $scriptFile data/nonexistent_rule.js data/nonexistent_rule.css > /dev/null;
+  $executable $scriptFile data/input/nonexistent_rule.js data/input/nonexistent_rule.css > /dev/null;
   if [[ $? != 1 ]] ; then
 	  echo 'Failed test: import nonexistent rule';
 	  hasErrors=true
   fi
 
-  $executable $scriptFile data/nonexistent_file.js > /dev/null;
+  $executable $scriptFile data/input/nonexistent_file.js > /dev/null;
   if [[ $? != 1 ]] ; then
 	  echo 'Failed test: import unreadable file';
 	  hasErrors=true
