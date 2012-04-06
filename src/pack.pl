@@ -15,8 +15,9 @@ sub prep_css {
 	$css =~ s/\n/ /g;
 	$css =~ s/$quoteStr/\\$quoteStr/g;
 
+	# Append "!important" to all rules (except those already specifying it)
 	if ($force_important) {
-		$css =~ s/;/ !important;/g;
+		$css =~ s/\s*(!important)?\s*;/ !important;/g;
 	}
 
 	return $quoteStr . $css . $quoteStr;

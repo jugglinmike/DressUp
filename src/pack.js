@@ -6,9 +6,12 @@ var path = require("path");
 var prepCss = function( css, quoteStr, forceImportant ) {
 	css = css.replace(new RegExp(quoteStr, "g"), "\\" + quoteStr );
 	css = quoteStr + css.replace(/\r|\n/g, " ") + quoteStr;
+
+	// Append "!important" to all rules (except those already specifying it)
 	if ( forceImportant ) {
-		css = css.replace(/;/g, " !important;");
+		css = css.replace(/\s*(!important)?\s*;/g, " !important;");
 	}
+
 	return css;
 };
 

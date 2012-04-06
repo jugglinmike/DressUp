@@ -3,9 +3,12 @@
 # newlines
 def prep_css( css, quote_str, force_important )
   css = css.gsub(/#{quote_str}/, "\\\\" + quote_str)
+
+  # Append "!important" to all rules (except those already specifying it)
   if (force_important)
-    css = css.gsub(/;/, " !important;")
+    css = css.gsub(/\s*(!important)?\s*;/, " !important;")
   end
+
   quote_str + css.gsub(/\r|\n/, " ") + quote_str
 end
 
