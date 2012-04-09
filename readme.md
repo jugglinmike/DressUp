@@ -62,11 +62,11 @@ From the command line
 Each argument should be a path (relative or absolute) to a JavaScript (.js) or CSS (.css) file.
 For example:
 
-    src/ruby/pack.rb test/sample_input/widget1.js test/sample_input/widget1.css
+    src/dressup.rb test/input/import_rule.js test/input/import_rule.css
 
 Of course, if file globs are available in your environment, the above may be simplified to:
 
-    src/ruby/pack.rb test/sample_input/widget1.*
+    src/dressup.rb test/input/import_rule.*
 
 If importing one or more CSS rules via the `import_rule` syntax, be sure to supply the script with a CSS file that defines those rules!
 

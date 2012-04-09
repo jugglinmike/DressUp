@@ -63,13 +63,13 @@ if [ $# -gt 0 ]
 then
 	if [ $1 == "ruby" ]
 	then
-		runTests ruby ../src/pack.rb;
+		runTests ruby ../src/dressup.rb;
 	elif [ $1 == "perl" ]
 	then
-		runTests perl ../src/pack.pl;
+		runTests perl ../src/dressup.pl;
 	elif [ $1 == "js" ]
 	then
-		runTests node ../src/pack.js;
+		runTests node ../src/dressup.js;
 	fi
 else
 	echo "Nada";
