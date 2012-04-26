@@ -26,7 +26,7 @@ String literals containing the previously-mentioned directives will be used as e
 
 To include a specific CSS rule (i.e. `div.mike`) in a JavaScript file:
 
-   var myRule = "!import_rule div.mike";
+    var myRule = "!import_rule div.mike";
 
 ...this would yield JavaScript like:
 
@@ -38,22 +38,22 @@ When building, be sure to supply a CSS file which defines the specified rule (mo
 
 To import a complete stylesheet file (i.e. `mark.css`) in a JavaScript file:
 
-   var mySheet = "!import_file ../styles/mark.css";
+    var mySheet = "!import_file ../styles/mark.css";
 
 ...this would yield JavaScript like:
 
-   var mySheet = "div.mark { height: 120%; } div.matt { float: right; }";
+    var mySheet = "div.mark { height: 120%; } div.matt { float: right; }";
 
 Please note that the file path is interpreted in relation to the JavaScript file's location.
 
 If either of these directives end with the `!important` keyword, every imported statement will be declared as `!important`.
 For instance, by re-writing the previous example:
 
-   var mySheet = "!import_file ../styles/mark.css !important";
+    var mySheet = "!import_file ../styles/mark.css !important";
 
 ...the following JavaScript file would be built:
 
-   var mySheet = "div.mark { height: 120% !important; } div.matt { float: right !important; }";
+    var mySheet = "div.mark { height: 120% !important; } div.matt { float: right !important; }";
 
 From the command line
 ---------------------
