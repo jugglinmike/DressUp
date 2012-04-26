@@ -79,3 +79,8 @@ Tests?
 Good question!
 This project is backed by acceptance tests; you can run these with `make test` (to test all implementations). `make testperl`, `make testruby`, and `make testjs` (to test specific implementations).
 The tests require the "grep" utility.
+
+License
+-------
+Copyright (c) 2012 Mike Pennisi
+Licensed under the MIT license.
