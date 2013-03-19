@@ -7,7 +7,7 @@ Why
 ---
 
 This repository was created to help optimize performance of third-party JavaScript applications.
-A more thorough review of the motivation can be found in the article "CSS in Third-Party JavaScript Applications: Importing", originally published on the Bocoup blog.
+A more thorough review of the motivation can be found in the article "[Third-Party JavaScript Development: Optimizing CSS Delivery](http://weblog.bocoup.com/3pjs-css-delivery/)", originally published on the Bocoup [blog](http://weblog.bocoup.com/).
 
 How
 ---
