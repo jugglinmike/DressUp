@@ -1,0 +1,8 @@
+header {
+	font-family: "Times New Roman", serif;
+	background-image: url('../img/somanycats.png');
+}
+
+h1 {
+	font-weight: bold !important;
+}

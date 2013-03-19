@@ -40,6 +40,12 @@ function runTests()
     hasErrors=true
   fi
 
+  if ! $executable $scriptFile input/arbitrary_directory/import_two_files_one_line.js | diff - expected/import_two_files_one_line.js > /dev/null;
+  then
+    echo 'Failed test: import two files on one line'
+    hasErrors=true
+  fi
+
   if ! $executable $scriptFile input/arbitrary_directory/import_important_file.js | diff - expected/import_important_file.js > /dev/null;
   then
     echo 'Failed test: import !important file'
